@@ -7,6 +7,8 @@ import ProductCreate from "./components/ProductCreate.jsx";
 import Layout from "./components/Layout.jsx";
 
 import Signup from "./auth/Signup.jsx";
+import Login from "./auth/Login.jsx";
+import CheckOut from "./components/CheckOut.jsx";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +26,14 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <Signup />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/checkout/:id/:user_id",
+        element: <CheckOut />,
       },
     ],
   },

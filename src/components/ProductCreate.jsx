@@ -17,13 +17,13 @@ const ProductCreate = () => {
       price: parseFloat(price),
       description: description,
       rating: parseFloat(rating),
-      user_id: userId,
     };
 
     axios
       .post("http://localhost:8080/products", payload)
       .then((response) => {
         console.log(response.data);
+        console.log(response.data.userId);
         setProducts((oldProducts) => [...oldProducts, response.data]);
         setTitle("");
         setPrice("");
