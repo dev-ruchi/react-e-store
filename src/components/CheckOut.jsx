@@ -205,8 +205,9 @@ const CheckOut = () => {
       </div>
 
       <div className="card-actions mt-4">
-        <button className="bg-gray-300 hover:bg-gray-400 py-2 px-4 rounded">
-          Pay Rs.{product.price} and place order
+        <button className="bg-gray-400 hover:bg-gray-500 px-6 py-2 rounded-lg text-white font-semibold inline-block">
+          Pay ${orders.reduce((acc, order) => acc + order.total_price, 0)} and
+          place order
         </button>
       </div>
     </div>

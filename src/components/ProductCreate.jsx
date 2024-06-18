@@ -34,6 +34,29 @@ const ProductCreate = () => {
         console.log(error);
       });
   }
+
+  function uploadImages(e) {
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    const files = e.target.files;
+
+    for (let i = 0; i < files.length; i++) {
+      formData.append(`files[]`, files[i]);
+    }
+
+    axios
+      .post("http://localhost:8080/files/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      });
+  }
+
   return (
     <>
       {
@@ -94,6 +117,17 @@ const ProductCreate = () => {
                 onChange={(e) => setDescription(e.target.value)}
                 type="text"
                 placeholder="Product Description"
+              />
+            </div>
+
+            <div className="form-control">
+              <label className="label">Images</label>
+              <input
+                id="images"
+                className="file-input file-input-bordered"
+                type="file"
+                onChange={uploadImages}
+                multiple
               />
             </div>
 
