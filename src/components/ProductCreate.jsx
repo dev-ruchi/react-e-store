@@ -3,34 +3,34 @@ import { useState } from "react";
 import axios from "axios";
 
 const ProductCreate = () => {
-  const [products, setProducts] = useState([]);
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
   const [rating, setRating] = useState(0);
+  const [images, setImages] = useState([]);
 
   function addProduct(e) {
     e.preventDefault();
 
     const payload = {
-      title: title,
+      title,
       price: parseFloat(price),
       description: description,
       rating: parseFloat(rating),
+      images,
     };
 
     axios
       .post("http://localhost:8080/products", payload)
-      .then((response) => {
-        console.log(response.data);
-        console.log(response.data.userId);
-        setProducts((oldProducts) => [...oldProducts, response.data]);
+      .then(() => {
+        alert("Product saved.");
         setTitle("");
         setPrice("");
         setDescription("");
         setRating("");
       })
       .catch((error) => {
+        alert("Something went wrong.");
         console.log(error);
       });
   }
@@ -53,7 +53,7 @@ const ProductCreate = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+        setImages(res.data.files);
       });
   }
 
@@ -110,14 +110,14 @@ const ProductCreate = () => {
               <label htmlFor="description" className="label font-semibold">
                 <span className="label-text">Description</span>
               </label>
-              <input
+              <textarea
                 id="description"
                 className="input input-bordered w-full"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 type="text"
                 placeholder="Product Description"
-              />
+              ></textarea>
             </div>
 
             <div className="form-control">
