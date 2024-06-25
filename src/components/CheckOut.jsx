@@ -5,11 +5,10 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 const CheckOut = () => {
-  const { id, user_id } = useParams();
-  const [orders, setOrders] = useState([]);
+  const { id } = useParams();
+  const userId = localStorage.getItem("userId");
   const [product, setProduct] = useState([]);
   const [addresses, setAddresses] = useState([]);
-  const [address, setAddress] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isFormVisible, setFormVisible] = useState(false);
   const [street, setStreet] = useState("");
@@ -18,19 +17,14 @@ const CheckOut = () => {
   const [pin_code, setPin_code] = useState("");
 
   useEffect(() => {
-    if (id && user_id) {
+    if (id) {
       fetchProduct();
       fetchAddress();
       placeOrder();
     }
-  }, [id, user_id]);
+  }, [id]);
 
-  function placeOrder() {
-    axios.get(`http://localhost:8080/orders/${user_id}`).then((response) => {
-      setOrders(response.data);
-      console.log("order", response.data);
-    });
-  }
+  function placeOrder() {}
 
   function fetchProduct() {
     axios
@@ -46,7 +40,7 @@ const CheckOut = () => {
 
   function fetchAddress() {
     axios
-      .get(`http://localhost:8080/addresses/${user_id}`)
+      .get(`http://localhost:8080/addresses/${userId}`)
       .then((response) => {
         setAddresses(response.data);
         console.log("Address response data:", response.data);
@@ -73,14 +67,17 @@ const CheckOut = () => {
       city: city,
       state: state,
       pin_code: pin_code,
-      user_id: parseInt(user_id),
+      user_id: parseInt(userId),
     };
 
     axios
       .post(`http://localhost:8080/address`, payload)
-      .then((response) => {
-        setAddress([...addresses, response.data]);
-        console.log(response.data);
+      .then(({ data }) => {
+        setAddresses((oldVal) => {
+          const newAddresses = [...oldVal, data];
+          setSelectedAddress(newAddresses.length - 1); 
+          return newAddresses;
+        });
         setStreet("");
         setCity("");
         setState("");
@@ -103,30 +100,34 @@ const CheckOut = () => {
       <div className="flex">
         <div className="flex flex-wrap card w-96 bg-base-100 shadow-xl flex-grow">
           <h2 className="card-title my-8 mx-6 text-3xl">Shipping Address</h2>
-          {addresses.map((address, index) => (
-            <div key={index}>
-              <div className="card-body">
-                <div className="p-4 bg-base-200 rounded-lg shadow-md">
-                  <label className="flex items-start space-x-4">
-                    <input
-                      type="radio"
-                      name="shippingAddress"
-                      value={index}
-                      checked={selectedAddress === index}
-                      onChange={() => setSelectedAddress(index)}
-                      className="radio radio-primary"
-                    />
-                    <span className="text-left">
-                      <p className="font-semibold text-lg">{address.street}</p>
-                      <p className="text-gray-600">{address.city}</p>
-                      <p className="text-gray-600">{address.state}</p>
-                      <p className="text-gray-600">{address.pin_code}</p>
-                    </span>
-                  </label>
+          <div className="mb-4">
+            {addresses.map((address, index) => (
+              <div key={index}>
+                <div className="card-body py-2">
+                  <div className="p-4 bg-base-200 rounded-lg shadow-md">
+                    <label className="flex items-start space-x-4">
+                      <input
+                        type="radio"
+                        name="shippingAddress"
+                        value={index}
+                        checked={selectedAddress === index}
+                        onChange={() => setSelectedAddress(index)}
+                        className="radio radio-primary"
+                      />
+                      <span className="text-left">
+                        <p className="font-semibold text-lg">
+                          {address.street}
+                        </p>
+                        <p className="text-gray-600">{address.city}</p>
+                        <p className="text-gray-600">{address.state}</p>
+                        <p className="text-gray-600">{address.pin_code}</p>
+                      </span>
+                    </label>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
           <div onClick={toggleFormVisibility} style={{ cursor: "pointer" }}>
             <h1 className="text-2xl font-semibold ml-6">+ Add new address</h1>
           </div>
@@ -192,23 +193,6 @@ const CheckOut = () => {
             )}
           </div>
         </div>
-        <div className="p-4 bg-gray-100 card-actions ml-8 mt-4">
-          {orders.map((order) => (
-            <div key={order.id} className="mb-4 p-4 bg-white rounded shadow-md">
-              <p className="text-lg font-semibold">
-                Total Price: ${order.total_price}
-              </p>
-              <p className="text-gray-700">Quantity: {order.quantity}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="card-actions mt-4">
-        <button className="bg-gray-400 hover:bg-gray-500 px-6 py-2 rounded-lg text-white font-semibold inline-block">
-          Pay ${orders.reduce((acc, order) => acc + order.total_price, 0)} and
-          place order
-        </button>
       </div>
     </div>
   );

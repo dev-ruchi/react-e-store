@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       {
-        path: "/products",
+        path: "/",
         element: <ProductList />,
       },
       {
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "/checkout/:id/:user_id",
+        path: "/checkout/:id/",
         element: <CheckOut />,
       },
     ],

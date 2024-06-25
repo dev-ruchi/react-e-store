@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -12,13 +13,8 @@ const ProductList = () => {
   function fetchProducts() {
     axios.get(`http://localhost:8080/products`).then((response) => {
       setProducts(response.data);
-      console.log(response.data);
     });
   }
-
-  const handleBuyClick = (productId) => {
-    console.log("Product ID:", productId);
-  };
 
   return (
     <div className="grid md:grid-cols-2 xl:grid-cols-3 auto-rows-fr w-fit mx-auto gap-16">
@@ -29,7 +25,8 @@ const ProductList = () => {
         >
           <figure>
             <img
-              src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
+              className="max-h-[200px] object-cover"
+              src={`http://localhost:8080/files/${product.images[0]}`}
               alt="Shoes"
             />
           </figure>
@@ -48,7 +45,7 @@ const ProductList = () => {
               {product.title}
             </h2>
 
-            <p className="text-xl text-gray-600">₹{product.price}</p>
+            <p className="text-xl text-gray-600">${product.price}</p>
             <p className=" text-gray-700 truncate">{product.description}</p>
             <span className="inline-block align-middle mb-4 text-yellow-500">
               {Array.from({ length: Math.round(product.rating) }, (_, i) => (
@@ -62,12 +59,12 @@ const ProductList = () => {
                 </svg>
               ))}
             </span>
-            <button
-              className="bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded"
-              onClick={() => handleBuyClick(product.id)}
+            <Link
+              to={`/checkout/${product.id}`}
+              className="bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded text-center"
             >
               Buy
-            </button>
+            </Link>
           </div>
         </div>
       ))}
