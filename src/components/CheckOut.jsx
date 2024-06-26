@@ -20,18 +20,28 @@ const CheckOut = () => {
     if (id) {
       fetchProduct();
       fetchAddress();
-      placeOrder();
     }
   }, [id]);
 
-  function placeOrder() {}
+  function placeOrder() {
+    axios
+      .post(`http://localhost:8080/orders`, {
+        user_id: parseInt(userId),
+        product_id: parseInt(product.id),
+        quantity: 1,
+        total_price: parseFloat(product.price),
+        status: "pending",
+      })
+      .then((response) => {
+        console.log(response.data);
+      });
+  }
 
   function fetchProduct() {
     axios
       .get(`http://localhost:8080/products/${id}`)
       .then((response) => {
         setProduct(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching product:", error);
@@ -43,10 +53,8 @@ const CheckOut = () => {
       .get(`http://localhost:8080/addresses/${userId}`)
       .then((response) => {
         setAddresses(response.data);
-        console.log("Address response data:", response.data);
         if (Array.isArray(response.data)) {
           setAddresses(response.data);
-          // Default to select the first address initially
           if (response.data.length > 0) {
             setSelectedAddress(0);
           }
@@ -75,7 +83,7 @@ const CheckOut = () => {
       .then(({ data }) => {
         setAddresses((oldVal) => {
           const newAddresses = [...oldVal, data];
-          setSelectedAddress(newAddresses.length - 1); 
+          setSelectedAddress(newAddresses.length - 1);
           return newAddresses;
         });
         setStreet("");
@@ -97,42 +105,44 @@ const CheckOut = () => {
       <div className="p-4">
         <h2 className="text-2xl font-semibold mb-2">{product.title}</h2>
       </div>
-      <div className="flex">
+      <div className="flex mb-8">
         <div className="flex flex-wrap card w-96 bg-base-100 shadow-xl flex-grow">
           <h2 className="card-title my-8 mx-6 text-3xl">Shipping Address</h2>
           <div className="mb-4">
-            {addresses.map((address, index) => (
-              <div key={index}>
-                <div className="card-body py-2">
-                  <div className="p-4 bg-base-200 rounded-lg shadow-md">
-                    <label className="flex items-start space-x-4">
-                      <input
-                        type="radio"
-                        name="shippingAddress"
-                        value={index}
-                        checked={selectedAddress === index}
-                        onChange={() => setSelectedAddress(index)}
-                        className="radio radio-primary"
-                      />
-                      <span className="text-left">
-                        <p className="font-semibold text-lg">
-                          {address.street}
-                        </p>
-                        <p className="text-gray-600">{address.city}</p>
-                        <p className="text-gray-600">{address.state}</p>
-                        <p className="text-gray-600">{address.pin_code}</p>
-                      </span>
-                    </label>
+            <div className="grid md:grid-cols-2 xl:grid-cols-3">
+              {addresses.map((address, index) => (
+                <div key={index}>
+                  <div className="card-body py-2">
+                    <div className="p-4 bg-base-200 rounded-lg shadow-md">
+                      <label className="flex items-start space-x-4">
+                        <input
+                          type="radio"
+                          name="shippingAddress"
+                          value={index}
+                          checked={selectedAddress === index}
+                          onChange={() => setSelectedAddress(index)}
+                          className="radio radio-primary"
+                        />
+                        <span className="text-left">
+                          <p className="font-semibold text-lg">
+                            {address.street}
+                          </p>
+                          <p className="text-gray-600">{address.city}</p>
+                          <p className="text-gray-600">{address.state}</p>
+                          <p className="text-gray-600">{address.pin_code}</p>
+                        </span>
+                      </label>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
           <div onClick={toggleFormVisibility} style={{ cursor: "pointer" }}>
             <h1 className="text-2xl font-semibold ml-6">+ Add new address</h1>
           </div>
 
-          <div className="container mx-auto p-4 max-w-lg">
+          <div className="p-4 lg:w-1/2">
             {isFormVisible && (
               <form onSubmit={addAddress} className="p-8 space-y-6">
                 <div className="form-control mb-4">
@@ -184,7 +194,7 @@ const CheckOut = () => {
                   />
                 </div>
                 <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-8 mx-24 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-8 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                   type="submit"
                 >
                   Add
@@ -194,6 +204,12 @@ const CheckOut = () => {
           </div>
         </div>
       </div>
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold mt-2 py-2 px-4 rounded"
+        onClick={placeOrder}
+      >
+        Pay ₹ {product.price} and place order
+      </button>
     </div>
   );
 };

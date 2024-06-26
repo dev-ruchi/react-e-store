@@ -45,7 +45,7 @@ const ProductList = () => {
               {product.title}
             </h2>
 
-            <p className="text-xl text-gray-600">${product.price}</p>
+            <p className="text-xl text-gray-600"> ₹{product.price}</p>
             <p className=" text-gray-700 truncate">{product.description}</p>
             <span className="inline-block align-middle mb-4 text-yellow-500">
               {Array.from({ length: Math.round(product.rating) }, (_, i) => (
