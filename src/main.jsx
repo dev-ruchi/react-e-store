@@ -9,6 +9,7 @@ import Layout from "./components/Layout.jsx";
 import Signup from "./auth/Signup.jsx";
 import Login from "./auth/Login.jsx";
 import CheckOut from "./components/CheckOut.jsx";
+import Orders from "./components/Orders.jsx";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "/checkout/:id/",
         element: <CheckOut />,
+      },
+      {
+        path: "/orders",
+        element: <Orders />,
       },
     ],
   },

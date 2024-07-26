@@ -33,7 +33,7 @@ const CheckOut = () => {
         status: "pending",
       })
       .then((response) => {
-        console.log(response.data);
+        window.location = `http://localhost:8080/payment/${response.data.id}`
       });
   }
 
