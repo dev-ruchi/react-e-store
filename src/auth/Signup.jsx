@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const Signup = () => {
-  const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -13,7 +15,9 @@ const Signup = () => {
   function handleSubmit(e) {
     e.preventDefault();
     const payload = {
-      username: username,
+      first_name: firstName,
+      last_name: lastName,
+      phone: phone,
       email: email,
       password: password,
     };
@@ -25,7 +29,9 @@ const Signup = () => {
         localStorage.setItem("userId", response.data.id);
         setUserId(response.data.id);
         console.log(response.data.id);
-        setUsername("");
+        setFirstName("");
+        setLastName("");
+        setPhone("");
         setEmail("");
         setPassword("");
       })
@@ -46,12 +52,44 @@ const Signup = () => {
               htmlFor="name"
               className="block text-gray-800 text-lg font-semibold mb-2"
             >
-              Username:
+              Firstname:
             </label>
             <input
               className="input input-primary w-full"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              type="text"
+              id="name"
+              placeholder="Enter your name"
+            />
+          </div>
+          <div className="mb-5">
+            <label
+              htmlFor="name"
+              className="block text-gray-800 text-lg font-semibold mb-2"
+            >
+              Lastname:
+            </label>
+            <input
+              className="input input-primary w-full"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              type="text"
+              id="name"
+              placeholder="Enter your name"
+            />
+          </div>
+          <div className="mb-5">
+            <label
+              htmlFor="name"
+              className="block text-gray-800 text-lg font-semibold mb-2"
+            >
+              Phone:
+            </label>
+            <input
+              className="input input-primary w-full"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               type="text"
               id="name"
               placeholder="Enter your name"
