@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import backend from "@/network/backend";
 import { useParams } from "react-router-dom";
 
 import { useState, useEffect } from "react";
@@ -24,8 +24,8 @@ const CheckOut = () => {
   }, [id]);
 
   function placeOrder() {
-    axios
-      .post(`http://localhost:8080/orders`, {
+    backend
+      .post(`/orders`, {
         user_id: parseInt(userId),
         product_id: parseInt(product.id),
         quantity: 1,
@@ -33,13 +33,13 @@ const CheckOut = () => {
         status: "pending",
       })
       .then((response) => {
-        window.location = `http://localhost:8080/payment/${response.data.id}`
+        window.location = `/payment/${response.data.id}`;
       });
   }
 
   function fetchProduct() {
-    axios
-      .get(`http://localhost:8080/products/${id}`)
+    backend
+      .get(`/products/${id}`)
       .then((response) => {
         setProduct(response.data);
       })
@@ -49,8 +49,8 @@ const CheckOut = () => {
   }
 
   function fetchAddress() {
-    axios
-      .get(`http://localhost:8080/addresses/${userId}`)
+    backend
+      .get(`/addresses/${userId}`)
       .then((response) => {
         setAddresses(response.data);
         if (Array.isArray(response.data)) {
@@ -78,8 +78,8 @@ const CheckOut = () => {
       user_id: parseInt(userId),
     };
 
-    axios
-      .post(`http://localhost:8080/address`, payload)
+    backend
+      .post(`/address`, payload)
       .then(({ data }) => {
         setAddresses((oldVal) => {
           const newAddresses = [...oldVal, data];

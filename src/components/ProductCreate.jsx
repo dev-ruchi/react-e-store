@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import axios from "axios";
+import backend from "@/network/backend";
 
 const ProductCreate = () => {
   const [title, setTitle] = useState("");
@@ -20,8 +20,8 @@ const ProductCreate = () => {
       images,
     };
 
-    axios
-      .post("http://localhost:8080/products", payload)
+    backend
+      .post("/products", payload)
       .then(() => {
         alert("Product saved.");
         setTitle("");
@@ -46,8 +46,8 @@ const ProductCreate = () => {
       formData.append(`files[]`, files[i]);
     }
 
-    axios
-      .post("http://localhost:8080/files/upload", formData, {
+    backend
+      .post("/files/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

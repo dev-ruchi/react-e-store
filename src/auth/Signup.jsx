@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import backend from "@/network/backend";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -8,9 +8,6 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [userId, setUserId] = useState(
-    parseInt(localStorage.getItem("userId"))
-  );
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -22,13 +19,13 @@ const Signup = () => {
       password: password,
     };
 
-    axios
-      .post("http://localhost:8080/users", payload)
+    backend
+      .post("/users", payload)
       .then((response) => {
-        console.log(response);
-        localStorage.setItem("userId", response.data.id);
+        localStorage.setItem("user", response.data.user);
+        localStorage.setItem("token", response.data.token);
+
         setUserId(response.data.id);
-        console.log(response.data.id);
         setFirstName("");
         setLastName("");
         setPhone("");

@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import backend from "@/network/backend";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -11,7 +11,7 @@ const ProductList = () => {
   }, []);
 
   function fetchProducts() {
-    axios.get(`http://localhost:8080/products`).then((response) => {
+    backend.get(`/products`).then((response) => {
       setProducts(response.data);
     });
   }

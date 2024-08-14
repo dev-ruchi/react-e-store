@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import backend from "@/network/backend";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -13,8 +13,8 @@ const Login = () => {
       password: password,
     };
 
-    axios
-      .post("http://localhost:8080/login", payload)
+    backend
+      .post("/login", payload)
       .then((response) => {
         console.log(response);
         setData(response.data);
