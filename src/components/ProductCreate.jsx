@@ -1,5 +1,6 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import backend from "@/network/backend";
 
 const ProductCreate = () => {
@@ -8,9 +9,30 @@ const ProductCreate = () => {
   const [description, setDescription] = useState("");
   const [rating, setRating] = useState(0);
   const [images, setImages] = useState([]);
+  const [isTokenValid, setIsTokenValid] = useState(true);
+  const navigate = useNavigate();
+
+
+  const getToken = () => localStorage.getItem("token");
+
+  const isValidToken = (token) => token && token.length > 0;
+  useEffect(() => {
+    const token = getToken();
+    if (!isValidToken(token)) {
+      setIsTokenValid(false);
+      navigate("/login"); // Redirect to login page
+    }
+  }, [navigate]);
 
   function addProduct(e) {
     e.preventDefault();
+
+    const token = getToken();
+    if (!isValidToken(token)) {
+      alert("Session expired. Please log in again.");
+      navigate("/login"); // Redirect to login page
+      return;
+    }
 
     const payload = {
       title,
@@ -21,7 +43,11 @@ const ProductCreate = () => {
     };
 
     backend
-      .post("/products", payload)
+      .post("/products", payload, {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      })
       .then(() => {
         alert("Product saved.");
         setTitle("");
@@ -55,6 +81,10 @@ const ProductCreate = () => {
       .then((res) => {
         setImages(res.data.files);
       });
+  }
+
+  if (!isTokenValid) {
+    return null;
   }
 
   return (
