@@ -8,7 +8,6 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-
   function handleSubmit(e) {
     e.preventDefault();
     const payload = {
@@ -22,10 +21,9 @@ const Signup = () => {
     backend
       .post("/users", payload)
       .then((response) => {
-        localStorage.setItem("user", response.data.user);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
         localStorage.setItem("token", response.data.token);
 
-        setUserId(response.data.id);
         setFirstName("");
         setLastName("");
         setPhone("");

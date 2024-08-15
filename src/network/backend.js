@@ -6,7 +6,7 @@ const backend = axios.create({
 
 backend.interceptors.request.use((req) => {
   if (localStorage.token) {
-    req.headers.Authorization = `Bearer ${localStorage.token}`;
+    req.headers.Authorization = localStorage.token;
   }
   return req;
 });
