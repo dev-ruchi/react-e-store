@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 
 const CheckOut = () => {
   const { id } = useParams();
-  const userId = localStorage.getItem("userId");
   const [product, setProduct] = useState([]);
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -26,14 +25,13 @@ const CheckOut = () => {
   function placeOrder() {
     backend
       .post(`/orders`, {
-        user_id: parseInt(userId),
         product_id: parseInt(product.id),
         quantity: 1,
         total_price: parseFloat(product.price),
         status: "pending",
       })
       .then((response) => {
-        window.location = `/payment/${response.data.id}`;
+        window.location = `${import.meta.env.VITE_BACKEND_BASE_URL}/payment/${response.data.id}`;
       });
   }
 
@@ -50,7 +48,7 @@ const CheckOut = () => {
 
   function fetchAddress() {
     backend
-      .get(`/addresses/${userId}`)
+      .get(`/addresses`)
       .then((response) => {
         setAddresses(response.data);
         if (Array.isArray(response.data)) {
@@ -75,7 +73,6 @@ const CheckOut = () => {
       city: city,
       state: state,
       pin_code: pin_code,
-      user_id: parseInt(userId),
     };
 
     backend

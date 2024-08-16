@@ -4,14 +4,13 @@ import backend from "@/network/backend";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
-  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     fetchOrders();
   }, []);
 
   function fetchOrders() {
-    backend.get(`/orders/${userId}`).then((response) => {
+    backend.get("/orders").then((response) => {
       setOrders(response.data);
       console.log(response.data);
     });
