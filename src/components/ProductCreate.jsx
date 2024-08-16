@@ -12,7 +12,6 @@ const ProductCreate = () => {
   const [isTokenValid, setIsTokenValid] = useState(true);
   const navigate = useNavigate();
 
-
   const getToken = () => localStorage.getItem("token");
 
   const isValidToken = (token) => token && token.length > 0;
@@ -45,7 +44,7 @@ const ProductCreate = () => {
     backend
       .post("/products", payload, {
         headers: {
-          Authorization: `Bearer ${token}`, 
+          Authorization: `Bearer ${token}`,
         },
       })
       .then(() => {

@@ -26,7 +26,7 @@ const ProductList = () => {
           >
             <figure>
               <img
-                className="max-h-[200px] object-cover"
+                className="h-[200px] w-[200px] block object-contain"
                 src={`http://localhost:8080/files/${product.images[0]}`}
                 alt="Shoes"
               />

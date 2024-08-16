@@ -1,13 +1,31 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import profile from "../assets/profile.webp";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
+  const [isTokenValid, setIsTokenValid] = useState(true);
+
+  const getToken = () => localStorage.getItem("token");
+
+  const isValidToken = (token) => token && token.length > 0;
+  useEffect(() => {
+    const token = getToken();
+    if (!isValidToken(token)) {
+      setIsTokenValid(false);
+    }
+  }, []);
+
   return (
     <div className="navbar bg-base-100 shadow-md mb-16">
       <div className="container mx-auto">
-          <div className="flex-1">
-            <Link to="/" className="btn btn-ghost text-xl">Ecommerce</Link>
-          </div>
+        <div className="flex-1">
+          <Link to="/" className="btn btn-ghost text-xl">
+            Ecommerce
+          </Link>
+        </div>
+        {isTokenValid ? (
           <div className="flex-none gap-2">
             <div className="dropdown dropdown-end">
               <div
@@ -16,10 +34,7 @@ function Navbar() {
                 className="btn btn-ghost btn-circle avatar"
               >
                 <div className="w-10 rounded-full">
-                  <img
-                    alt="Tailwind CSS Navbar component"
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-                  />
+                  <img alt="Tailwind CSS Navbar component" src={profile} />
                 </div>
               </div>
               <ul
@@ -41,6 +56,12 @@ function Navbar() {
               </ul>
             </div>
           </div>
+        ) : (
+          <div>
+            <button className="btn btn-primary mr-2">Login</button>
+            <button className="btn btn-primary">Signup</button>
+          </div>
+        )}
       </div>
     </div>
   );
