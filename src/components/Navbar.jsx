@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import profile from "../assets/profile.webp";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 function Navbar() {
   const [isTokenValid, setIsTokenValid] = useState(true);
@@ -58,8 +57,12 @@ function Navbar() {
           </div>
         ) : (
           <div>
-            <button className="btn btn-primary mr-2">Login</button>
-            <button className="btn btn-primary">Signup</button>
+            <Link to="/login" className="btn btn-primary mr-4 text-xl">
+              Login
+            </Link>
+            <Link to="/signup" className="btn btn-primary text-xl">
+              Signup
+            </Link>
           </div>
         )}
       </div>
