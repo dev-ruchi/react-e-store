@@ -32,12 +32,13 @@ const ProductList = () => {
               />
             </figure>
             <div className="card-body p-6">
-              <h2
+              <Link
+                to={`/products/${product.id}`}
                 className="card-title text-2xl font-bold text-gray-800 line-clamp-1"
                 title={product.title}
               >
                 {product.title}
-              </h2>
+              </Link>
 
               <p className="text-xl text-gray-600"> ₹{product.price}</p>
               <p className=" text-gray-700 truncate">{product.description}</p>

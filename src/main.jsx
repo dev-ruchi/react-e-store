@@ -10,6 +10,7 @@ import Signup from "./auth/Signup.jsx";
 import Login from "./auth/Login.jsx";
 import CheckOut from "./components/CheckOut.jsx";
 import Orders from "./components/Orders.jsx";
+import ProductDetails from "./components/ProductDetails.jsx";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "/products/create",
         element: <ProductCreate />,
+      },
+      {
+        path: "/products/:id",
+        element: <ProductDetails />,
       },
       {
         path: "/signup",
