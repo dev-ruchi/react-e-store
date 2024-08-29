@@ -4,11 +4,11 @@ import backend from "@/network/backend";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState({});
 
   useEffect(() => {
     fetchProductDetail();
-  }, []);
+  }, [id]);
 
   function fetchProductDetail() {
     backend.get(`/products/${id}`).then((response) => {
@@ -29,7 +29,7 @@ const ProductDetails = () => {
             <img
               className="h-[400px] w-[400px] object-contain"
               src={`http://localhost:8080/files/${product.images[0]}`}
-              alt={product.title}
+              alt={product.images}
             />
           ) : (
             <p>No image available.</p>
