@@ -1,10 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import profile from "../assets/profile.webp";
 import { useState, useEffect } from "react";
 
 function Navbar() {
   const [isTokenValid, setIsTokenValid] = useState(true);
+  const navigate = useNavigate();
 
   const getToken = () => localStorage.getItem("token");
 
@@ -15,6 +16,12 @@ function Navbar() {
       setIsTokenValid(false);
     }
   }, []);
+
+  const logout = () => {
+    localStorage.clear();
+    setIsTokenValid(false);
+    navigate("/login");
+  };
 
   return (
     <div className="navbar bg-base-100 shadow-md mb-16">
@@ -50,7 +57,7 @@ function Navbar() {
                   <a>Settings</a>
                 </li>
                 <li>
-                  <a>Logout</a>
+                  <a onClick={logout}>Logout</a>
                 </li>
               </ul>
             </div>

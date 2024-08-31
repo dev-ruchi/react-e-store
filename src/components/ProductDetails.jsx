@@ -13,7 +13,6 @@ const ProductDetails = () => {
   function fetchProductDetail() {
     backend.get(`/products/${id}`).then((response) => {
       setProduct(response.data);
-      console.log(response.data);
     });
   }
 
