@@ -7,6 +7,27 @@ const ProductDetails = () => {
   const [product, setProduct] = useState({});
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
+  const reviews = [
+    {
+      id: 1,
+      user: "John Doe",
+      rating: 4,
+      comment: "Great product! Highly recommend.",
+    },
+    {
+      id: 2,
+      user: "Jane Smith",
+      rating: 5,
+      comment: "Exceeded my expectations!",
+    },
+    {
+      id: 3,
+      user: "Alex Johnson",
+      rating: 3,
+      comment: "Good value for the price, but could be better.",
+    },
+  ];
+
   useEffect(() => {
     fetchProductDetail();
   }, [id]);
@@ -88,6 +109,35 @@ const ProductDetails = () => {
             </Link>
           </div>
         </div>
+      </div>
+      <div className="mt-12">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          Customer Reviews
+        </h2>
+        {reviews.length > 0 ? (
+          reviews.map((review) => (
+            <div key={review.id} className="mb-6">
+              <div className="flex items-center mb-2">
+                <h3 className="text-lg font-semibold">{review.user}</h3>
+                <div className="ml-4 text-yellow-500">
+                  {Array.from({ length: review.rating }, (_, i) => (
+                    <svg
+                      key={i}
+                      className="w-5 h-5 inline-block fill-current"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 .587l3.668 7.435 8.2 1.193-5.934 5.787 1.4 8.165-7.334-3.857-7.334 3.857 1.4-8.165-5.934-5.787 8.2-1.193z" />
+                    </svg>
+                  ))}
+                </div>
+              </div>
+              <p className="text-gray-700">{review.comment}</p>
+            </div>
+          ))
+        ) : (
+          <p>No reviews yet.</p>
+        )}
       </div>
     </div>
   );
