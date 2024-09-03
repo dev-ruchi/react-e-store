@@ -10,29 +10,10 @@ const ProductDetails = () => {
   const [rating, setRating] = useState("");
   const [comment, setComment] = useState("");
 
-  // const reviews = [
-  //   {
-  //     id: 1,
-  //     user: "John Doe",
-  //     rating: 4,
-  //     comment: "Great product! Highly recommend.",
-  //   },
-  //   {
-  //     id: 2,
-  //     user: "Jane Smith",
-  //     rating: 5,
-  //     comment: "Exceeded my expectations!",
-  //   },
-  //   {
-  //     id: 3,
-  //     user: "Alex Johnson",
-  //     rating: 3,
-  //     comment: "Good value for the price, but could be better.",
-  //   },
-  // ];
 
   useEffect(() => {
     fetchProductDetail();
+    fetchReviews()
   }, [id]);
 
   function fetchProductDetail() {
@@ -61,6 +42,12 @@ const ProductDetails = () => {
       .catch((error) => {
         console.error("Could not add review:", error);
       });
+  }
+
+  function fetchReviews() {
+    backend.get(`/reviews`).then((response) => {
+      setReviews(response.data);
+    });
   }
 
   if (!product) {
