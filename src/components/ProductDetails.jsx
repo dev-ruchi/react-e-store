@@ -6,27 +6,30 @@ const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [reviews, setReviews] = useState([]);
+  const [rating, setRating] = useState("");
+  const [comment, setComment] = useState("");
 
-  const reviews = [
-    {
-      id: 1,
-      user: "John Doe",
-      rating: 4,
-      comment: "Great product! Highly recommend.",
-    },
-    {
-      id: 2,
-      user: "Jane Smith",
-      rating: 5,
-      comment: "Exceeded my expectations!",
-    },
-    {
-      id: 3,
-      user: "Alex Johnson",
-      rating: 3,
-      comment: "Good value for the price, but could be better.",
-    },
-  ];
+  // const reviews = [
+  //   {
+  //     id: 1,
+  //     user: "John Doe",
+  //     rating: 4,
+  //     comment: "Great product! Highly recommend.",
+  //   },
+  //   {
+  //     id: 2,
+  //     user: "Jane Smith",
+  //     rating: 5,
+  //     comment: "Exceeded my expectations!",
+  //   },
+  //   {
+  //     id: 3,
+  //     user: "Alex Johnson",
+  //     rating: 3,
+  //     comment: "Good value for the price, but could be better.",
+  //   },
+  // ];
 
   useEffect(() => {
     fetchProductDetail();
@@ -36,6 +39,28 @@ const ProductDetails = () => {
     backend.get(`/products/${id}`).then((response) => {
       setProduct(response.data);
     });
+  }
+
+  function addReviews(e) {
+    e.preventDefault();
+
+    const payload = {
+      rating: parseFloat(rating),
+      comment: comment,
+    };
+
+    backend
+      .post(`/reviews`, payload)
+      .then((response) => {
+        setReviews(response.data);
+        console.log(response.data);
+
+        setRating("");
+        setComment("");
+      })
+      .catch((error) => {
+        console.error("Could not add review:", error);
+      });
   }
 
   if (!product) {
@@ -110,6 +135,47 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
+
+      {/* Review form */}
+
+      <div>
+        <form onSubmit={addReviews} className="p-8 space-y-6">
+          <div className="form-control mb-4">
+            <label htmlFor="street" className="label font-semibold">
+              <span className="label-text">Rating</span>
+            </label>
+            <input
+              className="input input-bordered w-full"
+              value={rating}
+              onChange={(e) => setRating(e.target.value)}
+              type="text"
+              placeholder="Rating"
+            />
+          </div>
+          <div className="form-control">
+            <label htmlFor="city" className="label font-semibold">
+              <span className="label-text">Comment</span>
+            </label>
+            <input
+              className="input input-bordered w-full"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              type="text"
+              placeholder="Comment"
+            />
+          </div>
+
+          <button
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-8 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            type="submit"
+          >
+            Add
+          </button>
+        </form>
+      </div>
+
+      {/* reviews */}
+
       <div className="mt-12">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">
           Customer Reviews
@@ -118,7 +184,7 @@ const ProductDetails = () => {
           reviews.map((review) => (
             <div key={review.id} className="mb-6">
               <div className="flex items-center mb-2">
-                <h3 className="text-lg font-semibold">{review.user}</h3>
+                {/* <h3 className="text-lg font-semibold">{review.user}</h3> */}
                 <div className="ml-4 text-yellow-500">
                   {Array.from({ length: review.rating }, (_, i) => (
                     <svg
