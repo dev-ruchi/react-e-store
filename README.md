@@ -1,6 +1,5 @@
-# React + Vite
-
 E-commerce Website
+
 This project is an e-commerce web application built using React with Vite as the build tool and styled using Tailwind CSS. The application provides essential e-commerce features such as a product list, product details, a checkout page, and a product creation page.
 
 Features
